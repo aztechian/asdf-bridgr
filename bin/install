@@ -1,41 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-install_bridgr() {
-  local install_type=$1
-  local install_version=$2
-  local install_path=$3
+if [[ -z $ASDF_DOWNLOAD_PATH ]]; then
+  source ./bin/common.sh
+  download_bridgr "${ASDF_INSTALL_TYPE}" "${ASDF_INSTALL_VERSION}" "${ASDF_INSTALL_PATH}"
+  exit 0
+fi
 
-  case $(uname -s) in
-    Darwin) os="MacOS" ;;
-    Linux) os="Linux" ;;
-    *) os="Windows" ;;
-  esac
+mkdir -p "${ASDF_INSTALL_PATH}"/bin
+cp "${ASDF_DOWNLOAD_PATH}"/bridgr "${ASDF_INSTALL_PATH}"/bin/bridgr
+chmod +x "${ASDF_INSTALL_PATH}"/bin/bridgr
 
-  case $(uname -m) in
-    x86_64) arch="amd64" ;;
-    arm64) arch-"arm64" ;;
-    *) arch="other" ;;
-  esac
-
-  if [[ $arch == other ]]; then
-    echo "Unsupported architecture $(uname -m). Only x64/arm64 binaries are available."
-    exit 2
-  fi
-    
-  if [[ $arch == arm64 ]] && [[ $os != Linux ]]; then
-    echo "$(uname -m) is only supported for Linux builds."
-    exit 2
-  fi
-
-  download="https://github.com/aztechian/bridgr/releases/download/v${install_version}/bridgr-${os}-${arch}"
-  # TODO: validate the checksum
-
-  if [ ! -d "${install_path}/bin" ]; then
-    mkdir -p "${install_path}/bin"
-  fi
-
-  curl -fL# -N "${download}" -o "${install_path}/bin/bridgr"
-}
-
-install_bridgr $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH

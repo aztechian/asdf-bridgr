@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+rm -rf "$ASDF_INSTALL_PATH" || true
+

@@ -28,6 +28,11 @@ download_bridgr() {
     exit 2
   fi
 
+  if [[ $install_type == "ref" ]]; then
+    echo "Only released versions are supported"
+    exit 3
+  fi
+
   download="https://github.com/aztechian/bridgr/releases/download/v${install_version}/bridgr-${os}-${arch}"
   cksum="https://github.com/aztechian/bridgr/releases/download/v${install_version}/bridgr-${os}-${arch}.sha256"
 
@@ -46,14 +51,14 @@ validate() {
   local target=$1
   local checksum=$2
 
-  builtin type -P openssl &>/dev/null && {
+  if builtin type -P openssl &>/dev/null; then
     is=$(digest_openssl "${target}")
-  } || {
+  else
     is=$(digest_sum "${target}")
-  }
+  fi
   shouldbe=$(cat "${checksum}")
 
-  [[ $is != $shouldbe ]] || echo "Checksums don't match!"; exit 2
+  [[ $is != "$shouldbe" ]] || echo "Checksums don't match!"; exit 2
 }
 
 digest_openssl() {
@@ -63,10 +68,10 @@ digest_openssl() {
 
 digest_sum() {
   local target=$1
-  [[ $(uname -s) == Darwin ]] && {
+  if [[ $(uname -s) == Darwin ]]; then
     shasum -a 256 "${target}" | cut -d' ' -f2
-  } || {
+  else
     sha256sum "${target}" | cut -d' ' -f2
-  }
+  fi
 }
 

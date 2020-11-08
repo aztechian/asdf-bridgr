@@ -1,0 +1,12 @@
+language: c
+dist: xenial
+script: 
+  - shellcheck bin/*
+  - asdf plugin test bridgr $TRAVIS_BUILD_DIR 'bridgr --version'
+before_script:
+  - git clone https://github.com/asdf-vm/asdf.git asdf
+  - . asdf/asdf.sh
+os:
+  - linux
+  - osx
+

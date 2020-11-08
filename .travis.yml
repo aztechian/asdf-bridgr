@@ -1,0 +1,25 @@
+language: c
+dist: xenial
+os:
+  - linux
+  - osx
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.\d+(-\S*)?$/
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+env:
+  global:
+    secure: "b3uGqr7AR5/TvXkje6M2pQVanpmSKR+E+f8AVGiTHSt6U7i+wt/LB3Xn7yg4wTkK0gtS/xTfuDdBM49uGpOciY6THLRpN0G/UeY8VDyw7U6E8edDRFmDCTJq29HETQBAZD/pFCQtm+u9ClBoBJH8QEztnvB2S388p1hFiymBqwabpfgg5ERXvVxv1oe3fYJG6FIw1Cv+2Wokr6ToczuluRgkLatJz3yYEEkkowW+1IJkdS9R6mtAgvKEYhhioTpVcVnHY8hb0Bl53QVIGrsBtWVsvHRJdNHfwHd6i49vs7OKRkqJiihgYVkoZveOQTKxcOOQ8rdIcnMCotr3aFv6BzVj9sxdHmJYbHifTZ1RzmGPw96fTuUbfErI5UVKkZLvrAny/8qJUtZiyb7rcL0iYxjWmOxm3VEPDxY4cFsczxWFJ2v7+i04zBb3Bx0yh1xs9dH3BFPJzJQr2SA+ImxvhqaGNAnu3/nL0ZBOcVyFrbb9fwKBfEXtbg8TVC9rAK+PWH300ekfBwd3uObQRJsgdRDnQMTuX9Tu3TnUDZiYVDyeFO1p3Krk7ThvglhGM5mo39f1rM43rFP2W1LnmtaclacnxZWVgxxPhEBhs76onyNJhlzWLCsFCXv9BxXoNKYDAr+S70HtStJHd/yKs5imFzJTKMDx0Twty2Kp3iGhMb8="
+
+script: 
+  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then shellcheck bin/*; fi
+  - asdf plugin test bridgr $TRAVIS_BUILD_DIR 'bridgr --version'
+before_script:
+  - git clone https://github.com/asdf-vm/asdf.git asdf
+  - . asdf/asdf.sh
+  # Hide "You are in 'detached HEAD' state" message
+  - git config --global advice.detachedHead false

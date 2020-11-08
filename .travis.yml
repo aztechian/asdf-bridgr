@@ -11,8 +11,6 @@ notifications:
   email:
     on_success: change
     on_failure: always
-env:
-  global: "advice.detachedHead=false"
 
 script: 
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then shellcheck bin/*; fi
@@ -20,4 +18,5 @@ script:
 before_script:
   - git clone https://github.com/asdf-vm/asdf.git asdf
   - . asdf/asdf.sh
-
+  # Hide "You are in 'detached HEAD' state" message
+  - git config --global advice.detachedHead false

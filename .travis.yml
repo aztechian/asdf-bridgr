@@ -1,12 +1,23 @@
 language: c
 dist: xenial
-script: 
-  - shellcheck bin/*
-  - asdf plugin test bridgr $TRAVIS_BUILD_DIR 'bridgr --version'
-before_script:
-  - git clone https://github.com/asdf-vm/asdf.git asdf
-  - . asdf/asdf.sh
 os:
   - linux
   - osx
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.\d+(-\S*)?$/
+notifications:
+  email:
+    on_success: change
+    on_failure: always
+env:
+  global: advice.detachedHead=false
+
+script: 
+  - if [[ $TRAVIS_OS == "linux" ]]; then shellcheck bin/*; fi
+  - asdf plugin test bridgr $TRAVIS_BUILD_DIR --asdf-plugin-gitref ${TRAVIS_PULL_REQUEST_BRANCH:-master} 'bridgr --version'
+before_script:
+  - git clone https://github.com/asdf-vm/asdf.git asdf
+  - . asdf/asdf.sh
 

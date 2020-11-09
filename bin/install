@@ -2,7 +2,8 @@
 set -e
 
 if [[ -z $ASDF_DOWNLOAD_PATH ]]; then
-  source ./bin/common.sh
+  # shellcheck source=bin/common.sh
+  source "$(dirname "${BASH_SOURCE[0]}")"/common.sh
   download_bridgr "${ASDF_INSTALL_TYPE}" "${ASDF_INSTALL_VERSION}" "${ASDF_INSTALL_PATH}"
   exit 0
 fi

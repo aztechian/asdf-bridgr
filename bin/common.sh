@@ -63,7 +63,7 @@ validate() {
 
 digest_openssl() {
   local target=$1
-  openssl dgst -sha256 -hex "${target}"
+  openssl dgst -sha256 -hex "${target}" | cut -d' ' -f2
 }
 
 digest_sum() {

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-source ./bin/common.sh
+# shellcheck source=bin/common.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/common.sh
 
 download_bridgr "${ASDF_INSTALL_TYPE}" "${ASDF_INSTALL_VERSION}" "${ASDF_DOWNLOAD_PATH}"
 

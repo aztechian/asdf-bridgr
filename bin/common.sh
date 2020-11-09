@@ -58,7 +58,11 @@ validate() {
   fi
   shouldbe=$(cat "${checksum}")
 
-  [[ $is != "$shouldbe" ]] || echo "Checksums don't match!"; exit 2
+  # shellcheck disable=SC2053
+  if [[ $is != $shouldbe ]]; then
+    echo "Checksums don't match!"
+    exit 2
+  fi
 }
 
 digest_openssl() {
